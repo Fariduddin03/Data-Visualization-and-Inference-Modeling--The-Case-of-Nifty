@@ -1,0 +1,97 @@
+<html >
+<head>
+        <title>Time Series Analysis</title>
+</head>
+<style>
+body {
+background-color:  #FFFFF7;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Plot container styling */
+.plot-container {
+    margin-bottom: 40px;
+}
+
+.plot-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+</style>
+
+<body>
+    <h1>Time Series Analysis</h1>
+    <form id="yearForm">
+	<p><strong>NOTE:</strong>The following time series plots are generated using historical data from past years.</p>
+	<p><strong>NOTE:</strong>Year must be between 2000 t0 2023 only</p>
+
+		<label for="column">Enter the Year:</label>
+              <input type="text" id="year" name="year" min="2000" max="2023" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="plotDiv"></div>
+
+    <script>
+        document.getElementById('yearForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const year = document.getElementById('year').value;
+            fetch('/predict', {
+                method: 'POST',
+                body: new URLSearchParams({ 'year': year }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ('plot_data' in data) {
+                    const img = document.createElement('img');
+                    img.src = 'data:image/png;base64,' + data.plot_data;
+                    document.getElementById('plotDiv').innerHTML = '';
+                    document.getElementById('plotDiv').appendChild(img);
+                } else if ('error' in data) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

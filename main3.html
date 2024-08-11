@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>Graph Plots</title>
+</head>
+<style>
+body {
+background-color:  #FFFFF7;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Plot container styling */
+.plot-container {
+    margin-bottom: 40px;
+}
+
+.plot-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+</style>
+<body>
+    <h1>Histogram Plots</h1>
+	<p><strong>NOTE:</strong>The following plots are generated using historical data from past years.</p>
+	<p><strong>NOTE:</strong>Use abbreviated month names (e.g., Jan, Feb, Mar, etc.....)</p>
+
+    <form id="plotForm">
+        <label for="column">Enter the Month name or "Annual" for overall years:</label>
+        <input type="text" id="column" name="column" required>
+        <button type="submit">Plot</button>
+    </form>
+
+    <div id="barPlot"></div>
+    <div id="linePlot"></div>
+    <div id="histPlot"></div>
+<center>
+    <script>
+        document.getElementById('plotForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var column = document.getElementById('column').value;
+            fetch('/plot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'column=' + column
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('barPlot').innerHTML = `<img src="${data.bar_plot}" alt="Bar Plot">`;
+                document.getElementById('linePlot').innerHTML = `<img src="${data.line_plot}" alt="Line Plot">`;
+                document.getElementById('histPlot').innerHTML = `<img src="${data.hist_plot}" alt="Histogram Plot">`;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</center>
+</body>
+</html>

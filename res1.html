@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Forecast Result</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+p {
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.note {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #666;
+        }
+
+
+    </style>
+</head>
+<body>
+    <h1>Forecast Result</h1>
+    <p>Predicting for : {{ numsteps }} years</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>January</th>
+                <th>February</th>
+                <th>March</th>
+                <th>April</th>
+                <th>May</th>
+                <th>June</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(numsteps) %}
+            <tr>
+                <td>{{ loop.index + 2023 }}</td>
+                {% for column_data in forecast %}
+                    {% if loop.index <= 6 %}
+                        <td>{{ column_data[i] }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<br>
+<br>
+<br>
+    <table>
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>July</th>
+                <th>August</th>
+                <th>September</th>
+                <th>October</th>
+                <th>November</th>
+                <th>December</th>
+		<th>Annual</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(numsteps) %}
+            <tr>
+                <td>{{ loop.index + 2023 }}</td>
+                {% for column_data in forecast %}
+                    {% if loop.index >6 %}
+                        <td>{{ column_data[i] }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<p class="note">Note: Predictions are based on the ARIMA model.</p>
+
+</body>
+</html>
